@@ -8,11 +8,11 @@
 		<version>4.0.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.swiftpay</groupId>
 	<artifactId>reward-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>reward-service</name>
-	<description>Reward-service for our swiftpay project</description>
+	<description>SwiftPay project using Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>

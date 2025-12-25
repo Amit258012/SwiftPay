@@ -12,6 +12,8 @@
         <module>user-service</module>
         <module>transaction-service</module>
         <module>notification-service</module>
+        <module>reward-service</module>
+
         <!--Add other services here-->
     </modules>
 
