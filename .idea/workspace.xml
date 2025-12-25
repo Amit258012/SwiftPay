@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bd10efe4-5d81-4980-aa28-4a954b398f63" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/config/KafkaConsumerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/config/KafkaConsumerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/kafka/RewardConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/kafka/RewardConsumer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
