@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bd10efe4-5d81-4980-aa28-4a954b398f63" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/config/KafkaConsumerConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/kafka/RewardConsumer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reward-service/src/test/java/com/swiftpay/reward_service/config/JacksonConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/config/KafkaConsumerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/config/KafkaConsumerConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,19 +62,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.NotificationServiceApplication.executor": "Run",
-    "Application.TransactionServiceApplication.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_directory_selection": "F:/SwiftPay/reward-service/src/test/java",
-    "last_opened_file_path": "F:/SwiftPay",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Kotlin"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.NotificationServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TransactionServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_directory_selection&quot;: &quot;F:/SwiftPay/reward-service/src/test/java&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/SwiftPay&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Kotlin&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.TransactionServiceApplication">
     <configuration name="NotificationServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.swiftpay.notification_service.NotificationServiceApplication" />
