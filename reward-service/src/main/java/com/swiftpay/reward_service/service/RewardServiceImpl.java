@@ -3,10 +3,12 @@ package com.swiftpay.reward_service.service;
 import com.swiftpay.reward_service.entity.Reward;
 import com.swiftpay.reward_service.repository.RewardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class RewardServiceImpl implements RewardService {
 
 
