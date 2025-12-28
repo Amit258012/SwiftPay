@@ -1,5 +1,6 @@
 package com.swiftpay.transaction_service.controller;
 
+import com.swiftpay.transaction_service.dto.TransferRequest;
 import com.swiftpay.transaction_service.entity.Transaction;
 import com.swiftpay.transaction_service.service.TransactionService;
 import jakarta.validation.Valid;
@@ -20,9 +21,9 @@ public class TransactionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@Valid @RequestBody Transaction transaction){
-        Transaction created =transactionService.createTransaction(transaction);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<Void> create(@RequestBody TransferRequest request) {
+        transactionService.create(request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/all")

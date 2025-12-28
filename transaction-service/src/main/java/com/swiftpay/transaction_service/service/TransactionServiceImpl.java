@@ -24,11 +24,11 @@ public class TransactionServiceImpl implements TransactionService{
         this.kafkaEventProducer = kafkaEventProducer;
     }
     @Override
-    public Transaction createTransaction(Transaction request) {
+    public Transaction create(TransferRequest request) {
         System.out.println("🚀 Entered createTransaction()");
 
-        Long senderId = request.getSenderID();
-        Long receiverId = request.getReceiverID();
+        Long senderId = request.getSenderId();
+        Long receiverId = request.getReceiverId();
         Double amount = request.getAmount();
 
         Transaction transaction = new Transaction();

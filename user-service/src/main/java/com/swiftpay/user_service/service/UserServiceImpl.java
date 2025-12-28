@@ -11,9 +11,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
+    public UserServiceImpl(UserRepository userRepository){this.userRepository = userRepository;}
+
 
     @Override
     public User createUser(User user) {
@@ -31,7 +30,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> getAllUser() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 }
