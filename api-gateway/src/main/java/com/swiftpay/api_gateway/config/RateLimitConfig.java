@@ -1,0 +1,23 @@
+package com.swiftpay.api_gateway.config;
+
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
+
+@Configuration
+public class RateLimitConfig {
+
+    // If we have userId then rate limit on that
+    // else use user IP address to do the rate limiting
+    @Bean
+    public KeyResolver userKeyResolver(){
+        return exchange -> {
+            String userId = exchange.getRequest().getHeaders().getFirst("X-User_Id");
+            if (userId != null){
+                return Mono.just(userId);
+            }
+            return Mono.just(exchange.getRequest().getRemoteAddress().getAddress().getHostAddress());
+        };
+    }
+}
