@@ -32,6 +32,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest request){
+        System.out.println("[USER-SERVICE] Signup endpoint HIT");
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
         if (existingUser.isPresent()) {
             return ResponseEntity.badRequest().body("⚠️ User already exists");

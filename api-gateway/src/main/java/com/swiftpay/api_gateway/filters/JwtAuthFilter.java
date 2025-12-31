@@ -23,37 +23,37 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
     );
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain){
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+
         String path = exchange.getRequest().getPath().value();
         String normalizedPath = path.replaceAll("/+$", "");
 
+        System.out.println("[JWT FILTER] Path=" + normalizedPath +
+                " Method=" + exchange.getRequest().getMethod());
 
-        if(PUBLIC_PATHS.contains(normalizedPath)){
-            return chain.filter(exchange)
-                    .doOnSubscribe(s -> System.out.println("Proceeding without check"))
-                    .doOnSuccess(v -> System.out.println("successfully passed"))
-                    .doOnError(e -> System.err.println("error occured"));
+        // ✅ 1. BYPASS PUBLIC PATHS COMPLETELY
+        if (PUBLIC_PATHS.contains(normalizedPath)) {
+            return chain.filter(exchange);
         }
 
-
-//        exchange.getRequest().getHeaders().forEach((key, value) -> {
-//            System.out.println("HEADER => " + key + " = " + value);
-//        });
-
-        String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-
-
+        // ✅ 2. AUTH HEADER CHECK
+        String authHeader = exchange.getRequest()
+                .getHeaders()
+                .getFirst(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
-
-        try{
+        try {
+            // ✅ 3. TOKEN VALIDATION
             String token = authHeader.substring(7);
             Claims claims = JwtUtil.validateToken(token);
+
             Integer userId = claims.get("userId", Integer.class);
+
+            // ✅ 4. MUTATE REQUEST (SAFE)
             ServerWebExchange mutatedExchange = exchange.mutate()
                     .request(exchange.getRequest().mutate()
                             .header("X-User-Email", claims.getSubject())
@@ -62,22 +62,13 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
                             .build())
                     .build();
 
-            mutatedExchange.getRequest().getHeaders().forEach((k, v) ->
-                    System.out.println("FORWARDED HEADER => " + k + " = " + v)
-            );
+            return chain.filter(mutatedExchange);
 
-
-            return chain.filter(mutatedExchange)
-                    .doOnSubscribe(s -> System.out.println("Proceeding without check"))
-                    .doOnSuccess(v -> System.out.println("successfully passed"))
-                    .doOnError(e -> System.err.println("error occured"));
-
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("[JWT FILTER ERROR] " + e.getMessage());
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
-
     }
 
     @Override
@@ -85,3 +76,4 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
         return -100;
     }
 }
+

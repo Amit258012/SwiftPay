@@ -7,10 +7,20 @@ spring:
 
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      default-filters:
+        - name: RequestSize
+          args:
+            maxSize: 1MB
+
       routes:
-        # User service
+        # ================= USER SERVICE =================
         - id: user-service
-          uri: http://localhost:8081
+          uri: lb://user-service
           predicates:
             - Path=/auth/**
           filters:
@@ -19,54 +29,144 @@ spring:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
+            - name: CircuitBreaker
+              args:
+                name: userCB
+                fallbackUri: forward:/fallback/user
+                statusCodes:
+                  - INTERNAL_SERVER_ERROR
+                  - BAD_GATEWAY
+                  - SERVICE_UNAVAILABLE
+                  - GATEWAY_TIMEOUT
 
-
-        # Transaction service
+        # ================= TRANSACTION SERVICE =================
         - id: transaction-service
-          uri: http://localhost:8082
+          uri: lb://transaction-service
           predicates:
             - Path=/api/transactions/**
           filters:
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 10
                 redis-rate-limiter.requestedTokens: 1
+            - name: CircuitBreaker
+              args:
+                name: transactionCB
+                fallbackUri: forward:/fallback/transaction
+                statusCodes:
+                  - INTERNAL_SERVER_ERROR
+                  - BAD_GATEWAY
+                  - SERVICE_UNAVAILABLE
+                  - GATEWAY_TIMEOUT
 
-
-        # Reward service
+        # ================= REWARD SERVICE =================
         - id: reward-service
-          uri: http://localhost:8085
+          uri: lb://reward-service
           predicates:
             - Path=/api/rewards/**
           filters:
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 10
                 redis-rate-limiter.requestedTokens: 1
+            - name: CircuitBreaker
+              args:
+                name: rewardCB
+                fallbackUri: forward:/fallback/reward
+                statusCodes:
+                  - INTERNAL_SERVER_ERROR
+                  - BAD_GATEWAY
+                  - SERVICE_UNAVAILABLE
+                  - GATEWAY_TIMEOUT
 
-
-        # Notification service
+        # ================= NOTIFICATION SERVICE =================
         - id: notification-service
-          uri: http://localhost:8084
+          uri: lb://notification-service
           predicates:
             - Path=/api/notifications/**
           filters:
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.replenishRate: 3
+                redis-rate-limiter.burstCapacity: 6
                 redis-rate-limiter.requestedTokens: 1
+            - name: CircuitBreaker
+              args:
+                name: notificationCB
+                fallbackUri: forward:/fallback/notification
+                statusCodes:
+                  - INTERNAL_SERVER_ERROR
+                  - BAD_GATEWAY
+                  - SERVICE_UNAVAILABLE
+                  - GATEWAY_TIMEOUT
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
 
 
-    httpclient:
-      max-initial-line-length: 4096
-      max-header-size: 8192
-    filters:
-      - name: RequestSize
-        args:
-          maxSize: 1MB
+resilience4j:
+  circuitbreaker:
+    instances:
+
+      userCB:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        recordExceptions:
+          - java.io.IOException
+          - org.springframework.web.server.ResponseStatusException
+        ignoreExceptions:
+          - org.springframework.web.server.MethodNotAllowedException
+          - org.springframework.web.server.ServerWebInputException
+
+      transactionCB:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        recordExceptions:
+          - java.io.IOException
+          - org.springframework.web.server.ResponseStatusException
+        ignoreExceptions:
+          - org.springframework.web.server.MethodNotAllowedException
+          - org.springframework.web.server.ServerWebInputException
+
+      rewardCB:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        recordExceptions:
+          - java.io.IOException
+          - org.springframework.web.server.ResponseStatusException
+        ignoreExceptions:
+          - org.springframework.web.server.MethodNotAllowedException
+          - org.springframework.web.server.ServerWebInputException
+
+      notificationCB:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        recordExceptions:
+          - java.io.IOException
+          - org.springframework.web.server.ResponseStatusException
+        ignoreExceptions:
+          - org.springframework.web.server.MethodNotAllowedException
+          - org.springframework.web.server.ServerWebInputException
+
+
 #jwt:
 #  secret: my-super-secret-key-that-you-never-share
 #  expiration: 86400000
@@ -74,5 +174,7 @@ spring:
 #logging:
 #  level:
 #    org.springframework.cloud.gateway: DEBUG
+#    org.springframework.web.server.adapter.HttpWebHandlerAdapter: DEBUG
 #    reactor.netty.http.server: DEBUG
+
 

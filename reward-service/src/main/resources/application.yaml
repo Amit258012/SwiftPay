@@ -1,5 +1,6 @@
 server:
-  port: 8085
+  port: 0
+
 
 spring:
   application:
@@ -30,5 +31,10 @@ spring:
     listener:
       missing-topics-fatal: false
 
-
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
 
