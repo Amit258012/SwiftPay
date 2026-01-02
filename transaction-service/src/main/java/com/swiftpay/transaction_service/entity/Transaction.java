@@ -20,10 +20,10 @@ public class Transaction {
     private Long id;
 
     @Column(nullable = false)
-    private Long senderID;
+    private Long senderId;
 
     @Column( nullable = false)
-    private Long receiverID;
+    private Long receiverId;
 
     @Column(nullable = false)
     @Positive(message = "Amount must be positive")

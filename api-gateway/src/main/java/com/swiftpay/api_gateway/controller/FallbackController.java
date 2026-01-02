@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-
 @RestController
 @RequestMapping("/fallback")
 public class FallbackController {
@@ -13,8 +12,7 @@ public class FallbackController {
     @RequestMapping("/user")
     public Mono<ResponseEntity<String>> userFallback() {
         return Mono.just(
-                ResponseEntity
-                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body("User Service is temporarily unavailable")
         );
     }
@@ -22,17 +20,23 @@ public class FallbackController {
     @RequestMapping("/transaction")
     public Mono<ResponseEntity<String>> transactionFallback() {
         return Mono.just(
-                ResponseEntity
-                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body("Transaction Service is temporarily unavailable")
+        );
+    }
+
+    @RequestMapping("/wallet")
+    public Mono<ResponseEntity<String>> walletFallback() {
+        return Mono.just(
+                ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body("Wallet Service is temporarily unavailable")
         );
     }
 
     @RequestMapping("/reward")
     public Mono<ResponseEntity<String>> rewardFallback() {
         return Mono.just(
-                ResponseEntity
-                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body("Reward Service is temporarily unavailable")
         );
     }
@@ -40,8 +44,7 @@ public class FallbackController {
     @RequestMapping("/notification")
     public Mono<ResponseEntity<String>> notificationFallback() {
         return Mono.just(
-                ResponseEntity
-                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body("Notification Service is temporarily unavailable")
         );
     }

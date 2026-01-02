@@ -24,6 +24,7 @@
         <module>reward-service</module>
         <module>api-gateway</module>
         <module>eureka-service</module>
+        <module>wallet-service</module>
     </modules>
 
     <properties>

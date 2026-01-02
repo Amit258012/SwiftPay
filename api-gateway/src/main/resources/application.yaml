@@ -18,7 +18,9 @@ spring:
             maxSize: 1MB
 
       routes:
-        # ================= USER SERVICE =================
+
+        # ================= USER / AUTH SERVICE =================
+        # ❌ NO CIRCUIT BREAKER HERE (WRITE OPERATION)
         - id: user-service
           uri: lb://user-service
           predicates:
@@ -29,15 +31,6 @@ spring:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
-            - name: CircuitBreaker
-              args:
-                name: userCB
-                fallbackUri: forward:/fallback/user
-                statusCodes:
-                  - INTERNAL_SERVER_ERROR
-                  - BAD_GATEWAY
-                  - SERVICE_UNAVAILABLE
-                  - GATEWAY_TIMEOUT
 
         # ================= TRANSACTION SERVICE =================
         - id: transaction-service
@@ -54,11 +47,22 @@ spring:
               args:
                 name: transactionCB
                 fallbackUri: forward:/fallback/transaction
-                statusCodes:
-                  - INTERNAL_SERVER_ERROR
-                  - BAD_GATEWAY
-                  - SERVICE_UNAVAILABLE
-                  - GATEWAY_TIMEOUT
+
+        # ================= WALLET SERVICE =================
+        - id: wallet-service
+          uri: lb://wallet-service
+          predicates:
+            - Path=/api/v1/wallets/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 10
+                redis-rate-limiter.requestedTokens: 1
+            - name: CircuitBreaker
+              args:
+                name: walletCB
+                fallbackUri: forward:/fallback/wallet
 
         # ================= REWARD SERVICE =================
         - id: reward-service
@@ -75,11 +79,6 @@ spring:
               args:
                 name: rewardCB
                 fallbackUri: forward:/fallback/reward
-                statusCodes:
-                  - INTERNAL_SERVER_ERROR
-                  - BAD_GATEWAY
-                  - SERVICE_UNAVAILABLE
-                  - GATEWAY_TIMEOUT
 
         # ================= NOTIFICATION SERVICE =================
         - id: notification-service
@@ -96,11 +95,7 @@ spring:
               args:
                 name: notificationCB
                 fallbackUri: forward:/fallback/notification
-                statusCodes:
-                  - INTERNAL_SERVER_ERROR
-                  - BAD_GATEWAY
-                  - SERVICE_UNAVAILABLE
-                  - GATEWAY_TIMEOUT
+
 
 eureka:
   client:
@@ -114,31 +109,19 @@ resilience4j:
   circuitbreaker:
     instances:
 
-      userCB:
-        slidingWindowType: COUNT_BASED
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        recordExceptions:
-          - java.io.IOException
-          - org.springframework.web.server.ResponseStatusException
-        ignoreExceptions:
-          - org.springframework.web.server.MethodNotAllowedException
-          - org.springframework.web.server.ServerWebInputException
-
       transactionCB:
         slidingWindowType: COUNT_BASED
         slidingWindowSize: 10
         minimumNumberOfCalls: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
-        recordExceptions:
-          - java.io.IOException
-          - org.springframework.web.server.ResponseStatusException
-        ignoreExceptions:
-          - org.springframework.web.server.MethodNotAllowedException
-          - org.springframework.web.server.ServerWebInputException
+
+      walletCB:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
 
       rewardCB:
         slidingWindowType: COUNT_BASED
@@ -146,12 +129,6 @@ resilience4j:
         minimumNumberOfCalls: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
-        recordExceptions:
-          - java.io.IOException
-          - org.springframework.web.server.ResponseStatusException
-        ignoreExceptions:
-          - org.springframework.web.server.MethodNotAllowedException
-          - org.springframework.web.server.ServerWebInputException
 
       notificationCB:
         slidingWindowType: COUNT_BASED
@@ -159,22 +136,3 @@ resilience4j:
         minimumNumberOfCalls: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
-        recordExceptions:
-          - java.io.IOException
-          - org.springframework.web.server.ResponseStatusException
-        ignoreExceptions:
-          - org.springframework.web.server.MethodNotAllowedException
-          - org.springframework.web.server.ServerWebInputException
-
-
-#jwt:
-#  secret: my-super-secret-key-that-you-never-share
-#  expiration: 86400000
-
-#logging:
-#  level:
-#    org.springframework.cloud.gateway: DEBUG
-#    org.springframework.web.server.adapter.HttpWebHandlerAdapter: DEBUG
-#    reactor.netty.http.server: DEBUG
-
-
