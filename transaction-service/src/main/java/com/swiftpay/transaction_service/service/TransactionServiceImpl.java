@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService{
@@ -38,9 +39,19 @@ public class TransactionServiceImpl implements TransactionService{
         this.kafkaEventProducer = kafkaEventProducer;
     }
     @Override
-    public Transaction create(Long userId,
+    public Transaction create(Long userId, String idempotencyKey,
                               TransferRequest request) {
         System.out.println("🚀 Entered createTransaction()");
+
+        Optional<Transaction> existing =
+                repository.findBySenderIdAndIdempotencyKey(userId, idempotencyKey);
+
+        if (existing.isPresent()) {
+            System.out.println("❌😬 Transactions already done" + existing.get());
+            return existing.get(); // 👈 idempotent return
+        }
+
+
 
         Long senderId = userId;
         Long receiverId = request.getReceiverId();
@@ -51,6 +62,7 @@ public class TransactionServiceImpl implements TransactionService{
         transaction.setReceiverId(receiverId);
         transaction.setAmount(amount);
         transaction.setTimeStamp(LocalDateTime.now());
+        transaction.setIdempotencyKey(idempotencyKey);
         transaction.setStatus("PENDING");
         Transaction savedTransaction = repository.save(transaction);
 //

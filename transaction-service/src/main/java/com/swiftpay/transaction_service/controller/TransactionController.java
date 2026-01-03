@@ -21,8 +21,8 @@ public class TransactionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Transaction> create(@RequestHeader("X-User-Id") Long userId, @RequestBody TransferRequest request) {
-        transactionService.create(userId, request);
+    public ResponseEntity<Transaction> create(@RequestHeader("X-User-Id") Long userId, @RequestHeader("Idempotency-Key") String idempotencyKey, @RequestBody TransferRequest request) {
+        transactionService.create(userId, idempotencyKey, request);
         return ResponseEntity.ok().build();
     }
 

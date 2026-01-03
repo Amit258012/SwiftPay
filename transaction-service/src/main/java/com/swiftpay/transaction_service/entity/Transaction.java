@@ -29,6 +29,10 @@ public class Transaction {
     @Positive(message = "Amount must be positive")
     private Double amount;
 
+    @Column(name = "idempotency_key", nullable = false)
+    private String idempotencyKey;
+
+
     @Column(name = "created_at")
     private LocalDateTime timeStamp;
 
