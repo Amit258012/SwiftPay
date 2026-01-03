@@ -8,7 +8,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "rewards")
+@Table(
+        name = "rewards",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "transaction_id")
+        }
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,8 +25,11 @@ public class Reward {
     private LocalDateTime sentAt;
     private Long userId;
 
-    @Column(unique = true)
+    @Column(name = "transaction_id", nullable = false)
     private Long transactionId;
 }
+
+
+
 
 

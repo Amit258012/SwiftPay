@@ -7,4 +7,5 @@ public class HoldRequest {
     private Long userId;
     private String currency;
     private Long amount;
+    private Long transactionId;
 }

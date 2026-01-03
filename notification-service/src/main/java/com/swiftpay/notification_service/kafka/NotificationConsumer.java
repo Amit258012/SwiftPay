@@ -7,6 +7,7 @@ import com.swiftpay.notification_service.entity.Notification;
 import com.swiftpay.notification_service.dto.Transaction;
 import com.swiftpay.notification_service.repository.NotificationRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -32,16 +33,34 @@ public class NotificationConsumer {
     }
 
 
-    @KafkaListener(topics = "txn-initiated", groupId = "notification-group-v2")
-    public void consumeTransaction(Transaction transaction) {
-        System.out.println("📥 Received transaction: " + transaction);
+    @KafkaListener(
+            topics = "txn-initiated",
+            groupId = "notification-group-v2"
+    )
+    public void consumeTransaction(Transaction event) {
 
-        Notification notification = new Notification();
-        notification.setUserId(String.valueOf(transaction.getSenderId()));
-        notification.setMessage("💰 ₹" + transaction.getAmount() + " received from user " + transaction.getSenderId());
-        notification.setSentAt(LocalDateTime.now());
+        Long txnId = event.getTransactionId();
+        System.out.println("📥 Received transaction: " + event);
 
-        notificationRepository.save(notification);
-        System.out.println("✅ Notification saved: " + notification);
+        try {
+            if (notificationRepository.existsByTransactionId(txnId)) {
+                System.out.println("⚠️ Duplicate notification ignored for txn " + txnId);
+                return; // ✅ SUCCESS
+            }
+
+            Notification notification = new Notification();
+            notification.setTransactionId(txnId);
+            notification.setUserId(String.valueOf(event.getSenderId()));
+            notification.setMessage("Payment successful");
+            notification.setSentAt(LocalDateTime.now());
+
+            notificationRepository.save(notification);
+
+        } catch (DataIntegrityViolationException ex) {
+            // 🔥 THIS IS THE KEY FIX
+            System.out.println("⚠️ Duplicate notification detected at DB for txn " + txnId);
+            // swallow exception → Kafka commits offset
+        }
     }
+
 }

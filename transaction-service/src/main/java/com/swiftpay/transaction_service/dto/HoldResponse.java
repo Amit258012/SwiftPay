@@ -11,4 +11,5 @@ public class HoldResponse {
     private String holdReference;
     private Long amount;
     private String status;
+    private Long transactionId;
 }

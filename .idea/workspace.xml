@@ -5,12 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bd10efe4-5d81-4980-aa28-4a954b398f63" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/controller/TransactionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/entity/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/entity/Transaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/repository/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/repository/TransactionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/swiftpay/notification_service/dto/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/swiftpay/notification_service/dto/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/swiftpay/notification_service/entity/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/swiftpay/notification_service/entity/Notification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/swiftpay/notification_service/kafka/NotificationConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/swiftpay/notification_service/kafka/NotificationConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/swiftpay/notification_service/repository/NotificationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/swiftpay/notification_service/repository/NotificationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/entity/Reward.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/entity/Reward.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/kafka/RewardConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/swiftpay/reward_service/kafka/RewardConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/dto/HoldRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/dto/HoldRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/dto/HoldResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/dto/HoldResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/service/TransactionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-service/src/main/java/com/swiftpay/transaction_service/service/TransactionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/dto/HoldRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/dto/HoldRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/dto/HoldResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/dto/HoldResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/entity/WalletHold.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/entity/WalletHold.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/repository/WalletHoldRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/repository/WalletHoldRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/service/WalletService.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/swiftpay/wallet_service/service/WalletService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +134,7 @@
       <recent name="F:\SwiftPay\api-gateway\src\main\java\com\swiftpay\api_gateway" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.ApiGatewayApplication">
+  <component name="RunManager" selected="Spring Boot.NotificationServiceApplication">
     <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
       <module name="api-gateway" />
@@ -220,10 +235,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.TransactionServiceApplication" />
-        <item itemvalue="Spring Boot.ApiGatewayApplication" />
-        <item itemvalue="Spring Boot.WalletServiceApplication" />
         <item itemvalue="Spring Boot.NotificationServiceApplication" />
+        <item itemvalue="Spring Boot.TransactionServiceApplication" />
+        <item itemvalue="Spring Boot.WalletServiceApplication" />
+        <item itemvalue="Spring Boot.ApiGatewayApplication" />
         <item itemvalue="Spring Boot.EurekaServiceApplication" />
       </list>
     </recent_temporary>

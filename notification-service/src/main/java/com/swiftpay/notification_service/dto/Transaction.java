@@ -8,4 +8,5 @@ public class Transaction {
     private Long senderId;
     private Long receiverId;
     private Double amount;
+    private Long transactionId;
 }

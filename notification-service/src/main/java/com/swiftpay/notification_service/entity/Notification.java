@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notifications")
+@Table(name = "notifications", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "transaction_id")
+})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,5 +24,8 @@ public class Notification {
     private String message;
 
     private LocalDateTime sentAt;
+
+    @Column(name = "transaction_id", nullable = false)
+    private Long transactionId;
 }
 

@@ -6,5 +6,6 @@ import lombok.Data;
 public class HoldRequest {
     private Long userId;
     private String currency;
-    private Long amount;
+    private Double amount;
+    private Long transactionId;
 }

@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface WalletHoldRepository extends JpaRepository<WalletHold, Long> {
     Optional<WalletHold> findByHoldReference(String holdReference);
 
+    Optional<WalletHold> findByTransactionId(Long transactionId);
+
     List<WalletHold> findByStatusAndExpiresAtBefore(String active, LocalDateTime now);
 }

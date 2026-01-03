@@ -10,6 +10,8 @@ import com.swiftpay.wallet_service.repository.WalletRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class WalletService {
 
@@ -130,8 +132,25 @@ public class WalletService {
 
     @Transactional
     public HoldResponse placeHold(HoldRequest request) {
+
+        System.out.println("🚨 HOLD REQUEST RECEIVED: " + request);
+        System.out.println("🚨 transactionId = " + request.getTransactionId());
+
         Wallet wallet = walletRepository.findByUserIdAndCurrency(request.getUserId(), request.getCurrency())
                 .orElseThrow(() -> new WalletNotFoundException("Wallet not found for user: " + request.getUserId()));
+
+        Optional<WalletHold> existing =
+                walletHoldRepository.findByTransactionId(request.getTransactionId());
+
+        if (existing.isPresent()) {
+            WalletHold hold = existing.get();
+            return new HoldResponse(
+                    hold.getHoldReference(),
+                    hold.getAmount(),
+                    hold.getStatus(),
+                    hold.getTransactionId()
+            );
+        } // 👈 idempotent return
 
         if (wallet.getAvailableBalance() < request.getAmount()) {
             throw new InsufficientFundsException("Not enough balance to hold");
@@ -141,14 +160,15 @@ public class WalletService {
 
         WalletHold hold = new WalletHold();
         hold.setWallet(wallet);
-        hold.setAmount(request.getAmount());
-        hold.setHoldReference("HOLD-" + System.currentTimeMillis());
+        hold.setAmount(Double.valueOf(request.getAmount()));
+        hold.setHoldReference("HOLD-" + request.getTransactionId());
+        hold.setTransactionId(request.getTransactionId());
         hold.setStatus("ACTIVE");
 
         walletRepository.save(wallet);
         walletHoldRepository.save(hold);
 
-        return new HoldResponse(hold.getHoldReference(), hold.getAmount(), hold.getStatus());
+        return new HoldResponse(hold.getHoldReference(), hold.getAmount(), hold.getStatus(), hold.getTransactionId());
     }
 
     // ---------------- CAPTURE ----------------
@@ -164,7 +184,7 @@ public class WalletService {
         }
 
         Wallet wallet = hold.getWallet();
-        wallet.setBalance(wallet.getBalance() - hold.getAmount());
+        wallet.setBalance((long) (wallet.getBalance() - hold.getAmount()));
 
         hold.setStatus("CAPTURED");
         walletRepository.save(wallet);
@@ -186,13 +206,14 @@ public class WalletService {
         }
 
         Wallet wallet = hold.getWallet();
-        wallet.setAvailableBalance(wallet.getAvailableBalance() + hold.getAmount());
+        wallet.setAvailableBalance((long) (wallet.getAvailableBalance() + hold.getAmount()));
+
 
         hold.setStatus("RELEASED");
         walletRepository.save(wallet);
         walletHoldRepository.save(hold);
 
-        return new HoldResponse(hold.getHoldReference(), hold.getAmount(), hold.getStatus());
+        return new HoldResponse(hold.getHoldReference(), hold.getAmount(), hold.getStatus(), hold.getTransactionId());
     }
 
     // ---------------- GET WALLET ----------------

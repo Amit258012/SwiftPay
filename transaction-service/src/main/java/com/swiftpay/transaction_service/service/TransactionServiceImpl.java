@@ -2,6 +2,7 @@ package com.swiftpay.transaction_service.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.swiftpay.transaction_service.dto.HoldRequest;
 import com.swiftpay.transaction_service.dto.TransactionEvent;
 import com.swiftpay.transaction_service.entity.Transaction;
 import com.swiftpay.transaction_service.dto.TransferRequest;
@@ -78,10 +79,6 @@ public class TransactionServiceImpl implements TransactionService{
         event.setAmount(amount);
         event.setTransactionId(savedTransaction.getId());
 
-
-
-
-
         // Step 0: Mark transaction as PENDING
 
         System.out.println("📥 Transaction PENDING saved: " + savedTransaction);
@@ -95,7 +92,13 @@ public class TransactionServiceImpl implements TransactionService{
 
         try {
             // Step 1: Place hold on sender wallet
-            String holdJson = String.format("{\"userId\": %d, \"currency\": \"INR\", \"amount\": %.2f}", senderId, amount);
+            HoldRequest holdRequest = new HoldRequest();
+            holdRequest.setUserId(senderId);
+            holdRequest.setCurrency("INR");
+            holdRequest.setAmount(amount);
+            holdRequest.setTransactionId(savedTransaction.getId()); // 🔥 critical
+
+            String holdJson = objectMapper.writeValueAsString(holdRequest);
             HttpEntity<String> holdEntity = new HttpEntity<>(holdJson, headers);
             ResponseEntity<String> holdResponse = restTemplate.postForEntity(walletServiceUrl + "/hold", holdEntity, String.class);
 

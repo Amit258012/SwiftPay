@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HoldResponse {
     private String holdReference;
-    private Long amount;
+    private Double amount;
     private String status;
+    private Long transactionId;
 }

@@ -25,6 +25,8 @@ public class RewardConsumer {
         this.mapper.disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
     }
 
+
+
     @PostConstruct
     public void init(){
         System.out.println("🤩 RewardService initialized waiting for messages...");
@@ -33,8 +35,11 @@ public class RewardConsumer {
     @KafkaListener(topics = "txn-initiated", groupId = "reward-group")
     public void consumerTransaction(Transaction transaction){
         try {
-            if(rewardRepository.existsByTransactionId(transaction.getTransactionId())){
-                System.out.println("⚠️ Reward already exists for transaction: " + transaction.getTransactionId());
+            Long txnId = transaction.getTransactionId();
+
+            // 🔥 Idempotency check
+            if (rewardRepository.existsByTransactionId(txnId)) {
+                System.out.println("⚠️ Duplicate event ignored for txn " + txnId);
                 return;
             }
             Reward reward = new Reward();
