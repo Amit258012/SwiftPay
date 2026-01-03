@@ -5,22 +5,18 @@ spring:
   application:
     name: user-service
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5432/user_db
+    username: postgres
+    password: root
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
+    jpa:
       hibernate:
-        format_sql: true
-
-  h2:
-    console:
-      enabled: true
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          format_sql: true
 
 eureka:
   client:

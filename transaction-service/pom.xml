@@ -59,13 +59,12 @@
 			<version>1.18.42</version>
 		</dependency>
 
-		<!-- H2 -->
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>2.4.240</version>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 
 		<!-- Dev tools -->
 		<dependency>

@@ -17,7 +17,7 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "user_id", nullable = false, unique = true)
     private Long userId;
 
     @Column(nullable = false, length = 3)
@@ -26,14 +26,21 @@ public class Wallet {
     @Column(nullable = false)
     private Long balance = 0L;
 
-    @Column(nullable = false)
-    private Long availableBalance = 0L;
+    @Column(name = "available_balance", nullable = false)
+    private Long availableBalance;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
 
     public Wallet(Long userId, String currency) {
         this.userId = userId;

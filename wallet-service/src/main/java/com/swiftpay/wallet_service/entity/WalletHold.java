@@ -21,7 +21,7 @@ public class WalletHold {
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
-    @Column(nullable = false)
+    @Column(name = "hold_reference", nullable = false, unique = true)
     private String holdReference;  // unique ID for each hold
 
     @Column(nullable = false)
@@ -30,7 +30,9 @@ public class WalletHold {
     @Column(nullable = false)
     private String status = "ACTIVE"; // ACTIVE, CAPTURED, RELEASED
 
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "expires_at")
     private LocalDateTime expiresAt;
 }

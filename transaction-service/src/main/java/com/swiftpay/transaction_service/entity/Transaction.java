@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -29,8 +29,9 @@ public class Transaction {
     @Positive(message = "Amount must be positive")
     private Double amount;
 
-    @Column(nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime timeStamp;
+
 
     @Column(nullable = false)
     private String status;
