@@ -1,6 +1,6 @@
 package com.swiftpay.transaction_service.kafka;
 
-import com.swiftpay.transaction_service.dto.TransferRequest;
+import com.swiftpay.transaction_service.dto.TransactionEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 public class KafkaEventProducer {
 
     private static final String TOPIC = "txn-initiated";
-    private final KafkaTemplate<String, TransferRequest> kafkaTemplate;
+    private final KafkaTemplate<String, TransactionEvent> kafkaTemplate;
 
     @Autowired
-    public KafkaEventProducer(KafkaTemplate<String, TransferRequest> kafkaTemplate) {
+    public KafkaEventProducer(KafkaTemplate<String, TransactionEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendTransactionEvent(String key, TransferRequest TransferRequest) {
+    public void sendTransactionEvent(String key, TransactionEvent TransferRequest) {
         kafkaTemplate.send(TOPIC, key, TransferRequest);
         System.out.println("🚀 Sent transaction: " + TransferRequest);
     }

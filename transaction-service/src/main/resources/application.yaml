@@ -28,6 +28,11 @@ spring:
     template:
       default-topic: transaction-events
 
+wallet:
+  service:
+    url: http://wallet-service/api/v1/wallets
+
+
 eureka:
   client:
     service-url:

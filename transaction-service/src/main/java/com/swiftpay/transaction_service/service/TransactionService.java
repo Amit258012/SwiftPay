@@ -6,7 +6,7 @@ import com.swiftpay.transaction_service.entity.Transaction;
 import java.util.List;
 
 public interface TransactionService {
-    Transaction create(TransferRequest transaction);
+    Transaction create(Long SenderId, TransferRequest transaction);
     List<Transaction> getAllTransactions();
     public Transaction getTransactionById(Long userId);
     public List<Transaction> getTransactionsByUser(Long userId);

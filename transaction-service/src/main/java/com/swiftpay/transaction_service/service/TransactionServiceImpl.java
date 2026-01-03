@@ -2,11 +2,13 @@ package com.swiftpay.transaction_service.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.swiftpay.transaction_service.dto.TransactionEvent;
 import com.swiftpay.transaction_service.entity.Transaction;
 import com.swiftpay.transaction_service.dto.TransferRequest;
 import com.swiftpay.transaction_service.kafka.KafkaEventProducer;
 import com.swiftpay.transaction_service.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,9 @@ public class TransactionServiceImpl implements TransactionService{
     private final ObjectMapper objectMapper;
     private final KafkaEventProducer kafkaEventProducer;
 
+    @Value("${wallet.service.url}")
+    private String walletServiceUrl;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -33,10 +38,11 @@ public class TransactionServiceImpl implements TransactionService{
         this.kafkaEventProducer = kafkaEventProducer;
     }
     @Override
-    public Transaction create(TransferRequest request) {
+    public Transaction create(Long userId,
+                              TransferRequest request) {
         System.out.println("🚀 Entered createTransaction()");
 
-        Long senderId = request.getSenderId();
+        Long senderId = userId;
         Long receiverId = request.getReceiverId();
         Double amount = request.getAmount();
 
@@ -45,7 +51,8 @@ public class TransactionServiceImpl implements TransactionService{
         transaction.setReceiverId(receiverId);
         transaction.setAmount(amount);
         transaction.setTimeStamp(LocalDateTime.now());
-        transaction.setStatus("SUCCESS");
+        transaction.setStatus("PENDING");
+        Transaction savedTransaction = repository.save(transaction);
 //
 //        System.out.println("📥 Incoming Transaction object: " + transaction);
 //
@@ -53,18 +60,21 @@ public class TransactionServiceImpl implements TransactionService{
 //        System.out.println("💾 Saved Transaction from DB: " + saved);
 
 //         ❗ Convert ENTITY → DTO
-        TransferRequest dto = new TransferRequest();
-        dto.setSenderId(senderId);
-        dto.setReceiverId(receiverId);
-        dto.setAmount(amount);
+        TransactionEvent event = new TransactionEvent();
+        event.setSenderId(senderId);
+        event.setReceiverId(receiverId);
+        event.setAmount(amount);
+        event.setTransactionId(savedTransaction.getId());
+
+
+
 
 
         // Step 0: Mark transaction as PENDING
-        transaction.setStatus("PENDING");
-        Transaction savedTransaction = repository.save(transaction);
+
         System.out.println("📥 Transaction PENDING saved: " + savedTransaction);
 
-        String walletServiceUrl = "http://wallet-service/api/v1/wallets";
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
@@ -189,7 +199,7 @@ public class TransactionServiceImpl implements TransactionService{
         // Step 6: Send Kafka Event
         try {
             String key = String.valueOf(savedTransaction.getId());
-            kafkaEventProducer.sendTransactionEvent(key, dto);
+            kafkaEventProducer.sendTransactionEvent(key, event);
             System.out.println("🚀 Kafka message sent");
         } catch (Exception e) {
             System.err.println("❌ Failed to send Kafka event: " + e.getMessage());

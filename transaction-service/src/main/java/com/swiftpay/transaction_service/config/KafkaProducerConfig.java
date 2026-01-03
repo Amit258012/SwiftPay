@@ -1,5 +1,6 @@
 package com.swiftpay.transaction_service.config;
 
+import com.swiftpay.transaction_service.dto.TransactionEvent;
 import com.swiftpay.transaction_service.dto.TransferRequest;
 import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -25,11 +26,11 @@ public class KafkaProducerConfig {
 
     @Bean
     @Primary
-    public ProducerFactory<String, TransferRequest> producerFactory() {
+    public ProducerFactory<String, TransactionEvent> producerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 
-        JsonSerializer<TransferRequest> jsonSerializer = new JsonSerializer<>();
+        JsonSerializer<TransactionEvent> jsonSerializer = new JsonSerializer<>();
         jsonSerializer.setAddTypeInfo(false); // 🚀 FIX
 
         return new DefaultKafkaProducerFactory<>(
@@ -41,7 +42,7 @@ public class KafkaProducerConfig {
 
     @Bean
     @Primary
-    public KafkaTemplate<String, TransferRequest> kafkaTemplate() {
+    public KafkaTemplate<String, TransactionEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

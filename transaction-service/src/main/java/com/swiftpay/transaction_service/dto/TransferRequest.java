@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransferRequest {
-    private Long senderId;
+//    private Long senderId;
     private Long receiverId;
     private Double amount;
 }

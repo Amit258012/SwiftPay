@@ -33,15 +33,15 @@ public class RewardConsumer {
     @KafkaListener(topics = "txn-initiated", groupId = "reward-group")
     public void consumerTransaction(Transaction transaction){
         try {
-            if(rewardRepository.existsByTransactionId(transaction.getSenderId())){
-                System.out.println("⚠️ Reward already exists for transaction: " + transaction.getSenderId());
+            if(rewardRepository.existsByTransactionId(transaction.getTransactionId())){
+                System.out.println("⚠️ Reward already exists for transaction: " + transaction.getTransactionId());
                 return;
             }
             Reward reward = new Reward();
             reward.setUserId(transaction.getSenderId());
             reward.setPoints(transaction.getAmount() * 100);
             reward.setSentAt(LocalDateTime.now());
-            reward.setTransactionId(transaction.getSenderId());
+            reward.setTransactionId(transaction.getTransactionId());
 
             rewardRepository.save(reward);
             System.out.println("✅ Reward saved: " + reward);

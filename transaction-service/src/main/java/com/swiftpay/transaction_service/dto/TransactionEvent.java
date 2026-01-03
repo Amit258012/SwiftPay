@@ -1,9 +1,9 @@
-package com.swiftpay.reward_service.dto;
+package com.swiftpay.transaction_service.dto;
 
 import lombok.Data;
 
 @Data
-public class Transaction {
+public class TransactionEvent {
     private Long senderId;
     private Long receiverId;
     private Double amount;
